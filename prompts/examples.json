@@ -1,0 +1,214 @@
+[
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar",
+      "feeder"
+    ],
+    "user": "Show me the power consumption in OSA1 building 1 datahall 401",
+    "sql": "SELECT SUM(CAST(p.readvalue AS FLOAT)) AS total_power\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'OSA1' AND Building = 'B1' AND DH = 'DH401'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n      SELECT MAX(gateway_timestamp)\n      FROM [dbo].[ctpdashboard]\n      WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar"
+    ],
+    "user": "What is the busbar power consumption in PAR1 Building 2 Datahall 10?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_kw\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1' AND Building = 'B2' AND DH = 'DH10'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+{
+  "user": "How many devices and points are in INZ4 Building 1 for Microsoft?",
+  "sql": "SELECT\n  COUNT(DISTINCT Global_Asset_Id) AS num_devices,\n  COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'INZ4'\n  AND Building = 'B1'\n  AND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": [
+    "device count",
+    "devices and points",
+    "point count",
+    "customer_ocn",
+    
+    "points",
+    "and",
+    "devices",
+    "many",
+    "how"
+  ],
+  "category": "lookup"
+},
+{
+  "category": "historical",
+  "keywords": ["sla", "breach", "violation", "temperature", "humidity", "last", "april", "march", "may", "before", "since"],
+  "user": "Were there SLA breaches in PAR1 Building 1 Datahall 5 last April?",
+"sql": "SELECT Primary_Key, TimeStamp, Temperature FROM dbo.TemperatureReading_1d WHERE Primary_Key LIKE 'PAR1-B1-DH05%' AND TimeStamp BETWEEN '2025-05-01' AND '2025-05-31'"
+
+},
+
+
+  {
+  "user": "How many devices and points are in INZ4 Building 1 for Microsoft?",
+  "sql": "SELECT\n  COUNT(DISTINCT Global_Asset_Id) AS num_devices,\n  COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'INZ4'\n  AND Building = 'B1'\n  AND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": [
+    "device count",
+    "devices and points",
+    "point count",
+    "customer_ocn",
+    
+    "points",
+    "and",
+    "devices",
+    "many",
+    "how"
+  ],
+  "category": "lookup"
+},
+{
+  "user": "How many devices and points for Microsoft?",
+  "sql": "SELECT\n  COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n  COUNT(*) AS point_num\nFROM [dbo].[ctp_lookup]\nWHERE Site LIKE '%'\n  AND Building LIKE '%'\n  AND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": [
+    "device count",
+    "point count",
+    "devices and points",
+    "devices",
+    "points",
+    "customer_ocn",
+    "how",
+    "many"
+  ],
+  "category": "lookup"
+},
+
+{
+  "user": "Please perform UAT on all Microsoft points and devices in CSV",
+  "sql": "-- Total Microsoft points/devices\nSELECT 'Total' AS Scope, COUNT(DISTINCT Global_Asset_ID) AS num_devices, COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Customer_OCN = 'Microsoft_ECw6jl6b75sU'\n\nUNION ALL\n\n-- Per-site counts\nSELECT Site AS Scope, COUNT(DISTINCT Global_Asset_ID), COUNT(*)\nFROM [dbo].[ctp_lookup]\nWHERE Customer_OCN = 'Microsoft_ECw6jl6b75sU'\nGROUP BY Site",
+  "keywords": ["uat", "csv", "microsoft", "devices", "points", "per site", "summary"],
+  "category": "lookup"
+},
+
+
+{
+  "user": "How many devices does Microsoft have?",
+  "sql": "SELECT\n  COUNT(DISTINCT Global_Asset_Id) AS num_devices\nFROM [dbo].[ctp_lookup]\nWHERE Site LIKE '%'\n  AND Building LIKE '%'\n  AND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": [
+    "device count",
+    "devices and points",
+    "point count",
+    "customer_ocn",
+    "devices",
+    "many",
+    "how"
+  ],
+  "category": "lookup"
+},
+{
+  "user": "How many points does Microsoft have?",
+  "sql": "SELECT\n  COUNT(*) AS point_num\nFROM [dbo].[ctp_lookup]\nWHERE Site LIKE '%'\n  AND Building LIKE '%'\n  AND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": [
+    "point count",
+    "points",
+    "customer_ocn",
+    "how",
+    "many"
+  ],
+  "category": "lookup"
+},
+
+
+
+
+  
+  {
+    "user": "What is the latest timestamp for PAR1?",
+    "sql": "SELECT MAX(gateway_timestamp) AS latest_timestamp\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1';",
+    "keywords": [
+      "latest",
+      "timestamp",
+      "par1",
+      "site",
+      "ctpdashboard",
+      "most recent"
+    ],
+    "category": "timestamp"
+  },
+  {
+    "category": "tehu",
+    "keywords": [
+      "temperature",
+      "cold aisle",
+      "aisle",
+      "tehu",
+      "row",
+      "ca06"
+    ],
+    "user": "What is the average aisle temperature in PAR1 building 2 datahall 10 cold aisle 6?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_aisle_temp\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1'\n  AND Building = 'B2'\n  AND DH = 'DH10'\n  AND Row = 'CA06'\n  AND [Point Name] = 'Temperature'\n  AND Global_Asset_ID LIKE '%TEHU%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'Temperature'\n  );"
+  },
+  {
+    "category": "tehu",
+    "keywords": [
+      "humidity",
+      "cold aisle",
+      "aisle",
+      "tehu",
+      "row",
+      "ca06"
+    ],
+    "user": "What is the average aisle humidity in PAR1 building 2 datahall 10 cold aisle 6?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_aisle_humidity\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1'\n  AND Building = 'B2'\n  AND DH = 'DH10'\n  AND Row = 'CA06'\n  AND [Point Name] = 'Humidity'\n  AND Global_Asset_ID LIKE '%TEHU%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'Humidity'\n  );"
+  },
+  {
+    "category": "weather_comparison",
+    "keywords": [
+      "compare",
+      "real world",
+      "outside",
+      "weather",
+      "external",
+      "sensor",
+      "temperature",
+      "vs",
+      "open-meteo"
+    ],
+    "user": "Compare temperature between PAR1 Building 1 weather station and real world weather",
+    "sql": "SELECT TOP 1 readvalue\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1'\nAND Building = 'B1'\nAND [Point Name] LIKE '%Temperature%'\nAND Global_Asset_ID LIKE '%WS%'\nORDER BY gateway_timestamp DESC;"
+  },
+
+  {
+  "category": "asset",
+  "keywords": ["global_asset_id", "kW", "KW reading", "temperature", "specific sensor"],
+  "user": "What is the KW reading for PAR1-B2-DH11-BB_17D",
+  "sql": "SELECT TOP 1 readvalue, gateway_timestamp FROM [dbo].[ctpdashboard] WHERE Global_Asset_ID = 'PAR1-B2-DH11-BB_17D' AND [Point Name] = 'kW' ORDER BY gateway_timestamp DESC;"
+},
+{
+  "category": "asset",
+  "keywords": ["global_asset_id", "kWh", "KWh reading", "temperature", "specific sensor"],
+  "user": "What is the KWh reading for PAR1-B2-DH10-BB_01A",
+  "sql": "SELECT TOP 1 readvalue, gateway_timestamp FROM [dbo].[ctpdashboard] WHERE Global_Asset_ID = 'PAR1-B2-DH10-BB_01A' AND [Point Name] = 'kW' ORDER BY gateway_timestamp DESC;"
+},
+  {
+    "category": "weather",
+    "keywords": [
+      "outside",
+      "outside temperature",
+      "temperature outside",
+      "weather station",
+      "temp outside",
+      "station",
+      "forecast",
+      "now",
+      "current"
+    ],
+    "user": "What is the temperature outside in paris 1 building 1 right now",
+    "sql": "SELECT TOP 1 readvalue, gateway_timestamp, Global_Asset_ID, [Point Name]\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1'\n  AND [Point Name] IN ('Outside_Temperature')\n  AND Global_Asset_ID LIKE '%WS%'\nORDER BY gateway_timestamp DESC;"
+  },
+  {
+  "category": "sla",
+  "keywords": ["sla", "breach", "temperature", "humidity", "violation"],
+  "user": "Check for SLA breaches in PAR1 Building 2 Datahall 10",
+  "sql": "SELECT Global_Asset_ID, [Point Name], CAST(readvalue AS FLOAT) AS readvalue, gateway_timestamp FROM [dbo].[ctpdashboard] WHERE Site = 'PAR1' AND Building = 'B2' AND DH = 'DH10' AND [Point Name] IN ('Temperature', 'Humidity') AND gateway_timestamp = (SELECT MAX(gateway_timestamp) FROM [dbo].[ctpdashboard] AS sub WHERE sub.Global_Asset_ID = ctpdashboard.Global_Asset_ID AND sub.[Point Name] = ctpdashboard.[Point Name]);"
+}
+
+]

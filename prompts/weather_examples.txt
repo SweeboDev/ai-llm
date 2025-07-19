@@ -1,0 +1,23 @@
+- WS = weather station (Outside_Temperature + Outside_Humidity)
+- If the user asks for weather station readings, match Global_Asset_ID with '%-WS%' and Point Name IN ('Outside_Temperature', 'Outside_Humidity')
+- Return the latest reading using: SELECT TOP 1 ... ORDER BY gateway_timestamp DESC
+- You should not try to add DH into the sql query. 
+
+User: Get me the weather station reading in PAR1
+SQL:
+SELECT TOP 2 readvalue, gateway_timestamp, Global_Asset_ID, [Point Name]
+FROM [dbo].[ctpdashboard]
+WHERE Site = 'PAR1'
+  AND [Point Name] IN ('Outside_Temperature', 'Outside_Humidity')
+  AND Global_Asset_ID LIKE '%WS%'
+ORDER BY gateway_timestamp DESC;
+
+User: Get me the weather station reading in PAR1 Temperature
+SQL:
+SELECT TOP 2 readvalue, gateway_timestamp, Global_Asset_ID, [Point Name]
+FROM [dbo].[ctpdashboard]
+WHERE Site = 'PAR1'
+  AND [Point Name] IN ('Outside_Temperature')
+  AND Global_Asset_ID LIKE '%WS%'
+ORDER BY gateway_timestamp DESC;
+

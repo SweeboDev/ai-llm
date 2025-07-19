@@ -1,0 +1,46 @@
+  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()));
+# INSTRUCTIONS:
+# - For historical temperature  queries, ALWAYS use the [dbo].[TemperatureReading_4h] table.
+# - NEVER include columns like Site, Building, or DH — they do NOT exist in this table.
+# - Use filtering via Primary_Key LIKE 'SITE-%-DH%-%-Temperature' or similar.
+# - Group by CAST([timestamp] AS DATE) for daily rows.
+# - Make sure you use Temperature or Humidity for the reading and NOT readvalue
+
+
+
+User: Show me the average temperature in INZ4 last month as CSV
+SQL:
+[CSV_DATA_START]
+SELECT
+  CAST([timestamp] AS DATE) AS [Day],
+  AVG(Temperature) AS AvgTemp,
+FROM [dbo].[TemperatureReading_4h]
+WHERE Primary_Key LIKE 'INZ4-%-DH%-%-Temperature'
+  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+GROUP BY CAST([timestamp] AS DATE)
+ORDER BY [Day] ASC;
+[CSV_DATA_END]
+
+User: Show me the average temperature in INZ4 last month
+SQL:
+SELECT
+  AVG(Temperature) AS AvgTemp
+FROM [dbo].[TemperatureReading_4h]
+WHERE Primary_Key LIKE 'INZ4-%-DH%-%-Temperature'
+  AND [timestamp] >= DATEADD(DAY, -7, GETDATE())
+
+User: Show me the average temperature in INZ4 last month as table
+SQL:
+SELECT
+  CAST([timestamp] AS DATE) AS [Day],
+  AVG(Temperature) AS AvgTemp
+FROM [dbo].[TemperatureReading_4h]
+WHERE Primary_Key LIKE 'INZ4-%-DH%-%-Temperature'
+  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))
+  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))
+GROUP BY CAST([timestamp] AS DATE)
+ORDER BY [Day] ASC
+
+

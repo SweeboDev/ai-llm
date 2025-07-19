@@ -1,0 +1,86 @@
+User: What is the temperature in PAR1 datahall 10?
+SQL:
+SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp
+FROM (
+    SELECT readvalue
+    FROM [dbo].[ctpdashboard] AS p
+    WHERE Site = 'PAR1' AND DH = 'DH10' AND [Point Name] LIKE '%Temperature%'
+      AND Global_Asset_ID LIKE '%TEHU%'
+      AND gateway_timestamp = (
+          SELECT MAX(gateway_timestamp)
+          FROM [dbo].[ctpdashboard]
+          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]
+      )
+) AS latest;
+
+
+User: What is the temperature in INZ4?
+SQL:
+SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp
+FROM (
+    SELECT readvalue
+    FROM [dbo].[ctpdashboard] AS p
+    WHERE Site = 'INZ4' AND DH LIKE 'DH%' AND [Point Name] LIKE '%Temperature%'
+      AND Global_Asset_ID LIKE '%TEHU%'
+      AND gateway_timestamp = (
+          SELECT MAX(gateway_timestamp)
+          FROM [dbo].[ctpdashboard]
+          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]
+      )
+) AS latest;
+
+
+User: What is the humidity and temperature in PAR1 datahall 6?
+SQL:
+SELECT 
+    AVG(CAST(CASE WHEN [Point Name] LIKE '%Temperature%' THEN readvalue END AS FLOAT)) AS avg_temp,
+    AVG(CAST(CASE WHEN [Point Name] LIKE '%Humidity%' THEN readvalue END AS FLOAT)) AS avg_humidity
+FROM (
+    SELECT readvalue, [Point Name]
+    FROM [dbo].[ctpdashboard] AS p
+    WHERE Site = 'PAR1'
+      AND DH = 'DH06'
+      AND Global_Asset_ID LIKE '%TEHU%'
+      AND [Point Name] IN ('Temperature', 'Humidity')
+      AND gateway_timestamp = (
+          SELECT MAX(gateway_timestamp)
+          FROM [dbo].[ctpdashboard]
+          WHERE Global_Asset_ID = p.Global_Asset_ID
+            AND [Point Name] = p.[Point Name]
+      )
+) AS latest;
+
+
+User: What is the average humidity in INZ4?
+SQL:
+SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp
+FROM (
+    SELECT readvalue
+    FROM [dbo].[ctpdashboard] AS p
+    WHERE Site = 'INZ4' AND DH LIKE 'DH%' AND [Point Name] LIKE '%Humidity%'
+      AND Global_Asset_ID LIKE '%TEHU%'
+      AND gateway_timestamp = (
+          SELECT MAX(gateway_timestamp)
+          FROM [dbo].[ctpdashboard]
+          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]
+      )
+) AS latest;
+
+User: What are the average temperatures in PAR1 datahall 5, 6, and 7?
+SQL:
+SELECT DH, AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp
+FROM (
+    SELECT DH, readvalue
+    FROM [dbo].[ctpdashboard] AS p
+    WHERE Site = 'PAR1'
+      AND DH IN ('DH05', 'DH06', 'DH07')
+      AND [Point Name] LIKE '%Temperature%'
+      AND Global_Asset_ID LIKE '%TEHU%'
+      AND gateway_timestamp = (
+          SELECT MAX(gateway_timestamp)
+          FROM [dbo].[ctpdashboard]
+          WHERE Global_Asset_ID = p.Global_Asset_ID
+            AND [Point Name] = p.[Point Name]
+      )
+) AS latest
+GROUP BY DH

@@ -1,0 +1,7 @@
+- If the user asks for historical averages:
+  - Use AVG(CAST(readvalue AS FLOAT)) and filter [gateway_timestamp] by the requested period
+  - For “past X days” use: gateway_timestamp >= DATEADD(DAY, -X, GETDATE())
+  - For “last month” use MONTH() and YEAR() comparisons with DATEADD(MONTH, -1, GETDATE())
+  - For “last week” use DATEPART(ISO_WEEK, gateway_timestamp) = DATEPART(ISO_WEEK, DATEADD(WEEK, -1, GETDATE()))
+
+

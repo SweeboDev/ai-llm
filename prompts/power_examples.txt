@@ -1,0 +1,30 @@
+- BB = busbars (used for power consumption)
+- To get total consumption, use SUM(CAST(readvalue AS FLOAT))
+- If the user asks for each feeder or individual readings, return one row per Global_Asset_ID with the latest reading only
+
+
+User: Show me the power consumption in OSA1 building 1 datahall 401
+SQL:
+SELECT SUM(CAST(p.readvalue AS FLOAT)) AS total_power
+FROM [dbo].[ctpdashboard] AS p
+WHERE Site = 'OSA1' AND Building = 'B1' AND DH = 'DH401'
+  AND [Point Name] = 'kW'
+  AND Global_Asset_ID LIKE '%BB%'
+  AND gateway_timestamp = (
+      SELECT MAX(gateway_timestamp)
+      FROM [dbo].[ctpdashboard]
+      WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'
+  );
+
+User: Show me all main feeders consumption in OSA1 building 1 datahall 401
+SQL:
+SELECT p.Global_Asset_ID, p.readvalue, p.gateway_timestamp
+FROM [dbo].[ctpdashboard] AS p
+WHERE Site = 'OSA1' AND Building = 'B1' AND DH = 'DH401'
+  AND [Point Name] = 'kW'
+  AND Global_Asset_ID LIKE '%BBMF%'
+  AND gateway_timestamp = (
+      SELECT MAX(gateway_timestamp)
+      FROM [dbo].[ctpdashboard]
+      WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'
+  );

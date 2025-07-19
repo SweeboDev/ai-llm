@@ -1,0 +1,286 @@
+[
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar",
+      "feeder"
+    ],
+    "user": "Show me the power consumption in OSA1 building 1 datahall 401",
+    "sql": "SELECT SUM(CAST(p.readvalue AS FLOAT)) AS total_power\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'OSA1' AND Building = 'B1' AND DH = 'DH401'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n      SELECT MAX(gateway_timestamp)\n      FROM [dbo].[ctpdashboard]\n      WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar"
+    ],
+    "user": "What is the busbar power consumption in PAR1 Building 2 Datahall 10?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_kw\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1' AND Building = 'B2' AND DH = 'DH10'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar",
+      "highest",
+      "maximum"
+    ],
+    "user": "What is the highest Busbar Power consumption in PAR1 Building 2 Datahall 10?",
+    "sql": "SELECT MAX(CAST(p.readvalue AS FLOAT)) AS max_kw\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1' AND Building = 'B2' AND DH = 'DH10'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+  {
+    "category": "power",
+    "keywords": [
+      "power",
+      "consumption",
+      "kw",
+      "busbar",
+      "data hall"
+    ],
+    "user": "What is the Data Hall Power consumption for PAR1 building 2 datahall 10?",
+    "sql": "SELECT SUM(CAST(p.readvalue AS FLOAT)) AS total_kw\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1' AND Building = 'B2' AND DH = 'DH10'\n  AND [Point Name] = 'kW'\n  AND Global_Asset_ID LIKE '%BB%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'kW'\n  );"
+  },
+  {
+  "user": "How many devices and points are in INZ4 for Microsoft",
+  "sql": "SELECT \n    COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n    COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'INZ4'\nAND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": ["device count", "devices and points" ,"point count", "customer_ocn", "microsoft", "lookup", "ctp_lookup"],
+  "category": "lookup"
+},
+
+{
+  "user": "How many devices and points are in PAR1 for Microsoft",
+  "sql": "...",
+  "keywords": [
+    "device count", "devices and points", "point count", "customer_ocn",
+    "microsoft", "lookup", "ctp_lookup", "how many", "par1", "site"
+  ],
+  "category": "lookup"
+},
+
+{
+  "user": "All points and devices for Microsoft_ECw6jl6b75sU",
+  "sql": "SELECT \n    COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n    COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": ["device count", "points", "microsoft", "customer_ocn", "ctp_lookup", "global_asset_id"],
+  "category": "lookup"
+},
+{
+  "user": "All devices and points in LON3 for Mitsubishi",
+  "sql": "SELECT \n    COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n    COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'LON3'\nAND Customer_OCN = 'Mit_75AJfamdnuj';",
+  "keywords": ["device count", "points", "mitsubishi", "customer_ocn", "ctp_lookup", "lon3", "site"],
+  "category": "lookup"
+},
+{
+  "user": "All devices and points in PAR1 Building 1 for microsoft",
+  "sql": "SELECT \n    COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n    COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'PAR1'\nAND Building = 'B1'\nAND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": ["device count", "points", "par1", "building 1", "b1", "microsoft", "customer_ocn", "ctp_lookup", "site", "building"],
+  "category": "lookup"
+},
+
+{
+  "user": "All devices and points in PAR1 for microsoft",
+  "sql": "SELECT \n    COUNT(DISTINCT Global_Asset_ID) AS num_devices,\n    COUNT(*) AS num_points\nFROM [dbo].[ctp_lookup]\nWHERE Site = 'PAR1'\nAND Customer_OCN = 'Microsoft_ECw6jl6b75sU';",
+  "keywords": ["device count", "points", "par1", "microsoft", "customer_ocn", "ctp_lookup", "site"],
+  "category": "lookup"
+},
+
+
+{
+  "user": "What is the latest timestamp for PAR1?",
+  "sql": "SELECT MAX(gateway_timestamp) AS latest_timestamp\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1';",
+  "keywords": ["latest", "timestamp", "par1", "site", "ctpdashboard", "most recent"],
+  "category": "timestamp"
+},
+
+  {
+    "category": "tehu",
+    "keywords": [
+      "temperature",
+      "cold aisle",
+      "aisle",
+      "tehu",
+      "row",
+      "ca06"
+    ],
+    "user": "What is the average aisle temperature in PAR1 building 2 datahall 10 cold aisle 6?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_aisle_temp\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1'\n  AND Building = 'B2'\n  AND DH = 'DH10'\n  AND Row = 'CA06'\n  AND [Point Name] = 'Temperature'\n  AND Global_Asset_ID LIKE '%TEHU%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'Temperature'\n  );"
+  },
+  {
+    "category": "tehu",
+    "keywords": [
+      "humidity",
+      "cold aisle",
+      "aisle",
+      "tehu",
+      "row",
+      "ca06"
+    ],
+    "user": "What is the average aisle humidity in PAR1 building 2 datahall 10 cold aisle 6?",
+    "sql": "SELECT AVG(CAST(p.readvalue AS FLOAT)) AS avg_aisle_humidity\nFROM [dbo].[ctpdashboard] AS p\nWHERE Site = 'PAR1'\n  AND Building = 'B2'\n  AND DH = 'DH10'\n  AND Row = 'CA06'\n  AND [Point Name] = 'Humidity'\n  AND Global_Asset_ID LIKE '%TEHU%'\n  AND gateway_timestamp = (\n    SELECT MAX(gateway_timestamp)\n    FROM [dbo].[ctpdashboard]\n    WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = 'Humidity'\n  );"
+  },
+ 
+  {
+    "category": "tehu",
+    "keywords": [
+      "temperature",
+      "humidity",
+      "tehu"
+    ],
+    "user": "What is the temperature in PAR1 datahall 10?",
+    "sql": "SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp\nFROM (\n    SELECT readvalue\n    FROM [dbo].[ctpdashboard] AS p\n    WHERE Site = 'PAR1' AND DH = 'DH10' AND [Point Name] LIKE '%Temperature%'\n      AND Global_Asset_ID LIKE '%TEHU%'\n      AND gateway_timestamp = (\n          SELECT MAX(gateway_timestamp)\n          FROM [dbo].[ctpdashboard]\n          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]\n      )\n) AS latest;"
+  },
+  {
+    "category": "tehu",
+    "keywords": [
+      "temperature",
+      "humidity",
+      "tehu"
+    ],
+    "user": "What is the temperature in INZ4?",
+    "sql": "SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp\nFROM (\n    SELECT readvalue\n    FROM [dbo].[ctpdashboard] AS p\n    WHERE Site = 'INZ4' AND DH LIKE 'DH%' AND [Point Name] LIKE '%Temperature%'\n      AND Global_Asset_ID LIKE '%TEHU%'\n      AND gateway_timestamp = (\n          SELECT MAX(gateway_timestamp)\n          FROM [dbo].[ctpdashboard]\n          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]\n      )\n) AS latest;"
+  },
+  {
+    "category": "tehu",
+    "keywords": [
+      "temperature",
+      "humidity",
+      "tehu"
+    ],
+    "user": "What is the average humidity in INZ4?",
+    "sql": "SELECT AVG(CAST(latest.readvalue AS FLOAT)) AS avg_temp\nFROM (\n    SELECT readvalue\n    FROM [dbo].[ctpdashboard] AS p\n    WHERE Site = 'INZ4' AND DH LIKE 'DH%' AND [Point Name] LIKE '%Humidity%'\n      AND Global_Asset_ID LIKE '%TEHU%'\n      AND gateway_timestamp = (\n          SELECT MAX(gateway_timestamp)\n          FROM [dbo].[ctpdashboard]\n          WHERE Global_Asset_ID = p.Global_Asset_ID AND [Point Name] = p.[Point Name]\n      )\n) AS latest;"
+  },
+  {
+    "category": "tehu_historical",
+    "keywords": [
+      "temperature",
+      "humidity",
+      "tehu",
+      "last",
+      "week",
+      "month",
+      "yesterday"
+    ],
+    "user": "Show me the average temperature in INZ4 last month as CSV",
+    "sql": "[CSV_DATA_START]\nSELECT\n  CAST([timestamp] AS DATE) AS [Day],\n  AVG(Temperature) AS AvgTemp,\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'INZ4-%-DH%-%-Temperature'\n  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))\n  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))\nGROUP BY CAST([timestamp] AS DATE)\nORDER BY [Day] ASC;\n[CSV_DATA_END]"
+  },
+  {
+  "category": "weather_comparison",
+  "keywords": [
+    "compare",
+    "real world",
+    "outside",
+    "weather",
+    "external",
+    "sensor",
+    "temperature",
+    "vs",
+    "open-meteo"
+  ],
+  "user": "Compare temperature between PAR1 Building 1 weather station and real world weather",
+  "sql": "SELECT TOP 1 readvalue\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1'\nAND Building = 'B1'\nAND [Point Name] LIKE '%Temperature%'\nAND Global_Asset_ID LIKE '%WS%'\nORDER BY gateway_timestamp DESC;"
+},
+
+  {
+    "category": "tehu_historical",
+    "keywords": [
+      "temperature",
+      "csv",
+      "last month",
+      "sensor",
+      "daily",
+      "datahall",
+      "par1",
+      "dh05"
+    ],
+    "user": "What was the average temperature in PAR1 Datahall 5 last month in csv?",
+    "sql": "[CSV_DATA_START]\nSELECT\n  CAST([timestamp] AS DATE) AS [Day],\n  Primary_Key AS Sensor,\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-%-DH05-%-Temperature'\n  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))\n  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))\nGROUP BY\n  CAST([timestamp] AS DATE),\n  Primary_Key\nORDER BY\n  [Day] ASC,\n  Primary_Key ASC;\n[CSV_DATA_END]"
+  },
+  {
+  "category": "tehu_historical",
+  "keywords": [
+    "temperature",
+    "compare",
+    "last month",
+    "april",
+    "tehu",
+    "average",
+    "historical",
+    "trend"
+  ],
+  "user": "Compare the average temperature in PAR1 Building 1 Datahall 5 last month to April",
+  "sql": "SELECT \n  'Last Month' AS period,\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-B1-DH05-%-Temperature'\n  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))\n  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))\n\nUNION ALL\n\nSELECT \n  'April' AS period,\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-B1-DH05-%-Temperature'\n  AND MONTH([timestamp]) = 4\n  AND YEAR([timestamp]) = YEAR(GETDATE())"
+},
+{
+  "category": "tehu_historical",
+  "keywords": [
+    "temperature",
+    "compare",
+    "2025",
+    "monthly average",
+    "tehu",
+    "average temperature",
+    "trend",
+    "yearly",
+    "building",
+    "datahall"
+  ],
+  "user": "what was the average temperatures in PAR1 Building 1 Datahall 5 in 2025",
+  "sql": "SELECT \n  DATENAME(MONTH, [timestamp]) AS month,\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-B1-DH05-%-Temperature'\n  AND YEAR([timestamp]) = 2025\nGROUP BY MONTH([timestamp]), DATENAME(MONTH, [timestamp])\nORDER BY MONTH([timestamp]);"
+},
+{
+  "category": "tehu_historical",
+  "keywords": [
+    "temperature",
+    "compare",
+    "2025",
+    "monthly average",
+    "tehu",
+    "average temperature",
+    "trend",
+    "yearly",
+    "building",
+    "datahall"
+  ],
+  "user": "what was the average temperatures in PAR1 Building 2 Datahall 10 in 2025",
+  "sql": "SELECT \n  DATENAME(MONTH, [timestamp]) AS month,\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-B2-DH10-%-Temperature'\n  AND YEAR([timestamp]) = 2025\nGROUP BY MONTH([timestamp]), DATENAME(MONTH, [timestamp])\nORDER BY MONTH([timestamp]);"
+},
+
+
+  {
+    "category": "tehu_historical",
+    "keywords": [
+      "temperature",
+      "humidity",
+      "tehu",
+      "last",
+      "week",
+      "month",
+      "yesterday"
+    ],
+    "user": "Show me the average temperature in PAR1 Building 1 Datahall 5 last month",
+    "sql": "SELECT\n  AVG(Temperature) AS AvgTemp\nFROM [dbo].[TemperatureReading_4h]\nWHERE Primary_Key LIKE 'PAR1-B1-DH05-%-Temperature'\n  AND MONTH([timestamp]) = MONTH(DATEADD(MONTH, -1, GETDATE()))\n  AND YEAR([timestamp]) = YEAR(DATEADD(MONTH, -1, GETDATE()))"
+  },
+  {
+    "category": "weather",
+    "keywords": [
+      "outside",
+      "outside temperature",
+      "temperature outside",
+      "weather station",
+      "temp outside",
+      "station",
+      "forecast",
+      "now",
+      "current"
+    ],
+    "user": "What is the temperature outside in paris 1 building 1 right now",
+    "sql": "SELECT TOP 1 readvalue, gateway_timestamp, Global_Asset_ID, [Point Name]\nFROM [dbo].[ctpdashboard]\nWHERE Site = 'PAR1'\n  AND [Point Name] IN ('Outside_Temperature')\n  AND Global_Asset_ID LIKE '%WS%'\nORDER BY gateway_timestamp DESC;"
+  }
+
+]
